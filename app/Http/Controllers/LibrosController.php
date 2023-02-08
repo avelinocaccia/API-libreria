@@ -66,13 +66,37 @@ class LibrosController extends Controller{
     public function update(Request $request, $id){
         $datosLibro = Libro::find($id);//busco el archivo
 
+        if($request->hasFile('imagen')){
+
+            if($datosLibro){//si el archivo esxiste
+                $rutaArchivo = base_path('public').$datosLibro->imagen; //guardo la ruta del archivo en una variable
+                if(file_exists($rutaArchivo)){// si el archivo existe
+                    unlink($rutaArchivo); //entonces borra el archivo
+                }
+    
+                $datosLibro->delete(); //borro el registro de la base de datos
+            }
+            
+            $nombreArchivoOriginal=$request->file('imagen')->getClientOriginalName(); //obtiene el nombre original del archivo qeu nos estan enviando
+            $nuevoNombre = Carbon::now()->timestamp."_".$nombreArchivoOriginal; // le asigno un nuevo nombre con un identificador unico qeu es el metodo now.
+            $carpetaDestino='./upload/'; //indico la carpeta de destino donde se va a subir el archivo
+            $request->file('imagen')->move($carpetaDestino, $nuevoNombre); //muevo el archivo a la carpeta de destino con el nuevo nombre
+           
+            //campo de la tabla = informacion recibida por postman
+            $datosLibro->imagen=ltrim($carpetaDestino,'.').$nuevoNombre;
+            $datosLibro->tipo=$request->tipo;
+
+            $datosLibro->save(); // salva los datos enviados a la db
+
+        }
+
         if($request->input('titulo')){
             $datosLibro->titulo=$request->input('titulo');
         }
 
         $datosLibro->save();
 
-        return response()->json("Datos actualizados");
+        return response()->json($datosLibro);
 
     }
 

@@ -26,6 +26,6 @@ $router->get('/ver/id/{id}','LibrosController@show');
 
 $router->get('/listado','LibrosController@index');
 $router->post('/crear','LibrosController@store');
-$router->put('/actualizar/{id}','LibrosController@update');
+$router->post('/actualizar/{id}','LibrosController@update');
 $router->delete('/borrar/{id}','LibrosController@delete');
 
