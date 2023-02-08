@@ -63,6 +63,19 @@ class LibrosController extends Controller{
 
     }
 
+    public function update(Request $request, $id){
+        $datosLibro = Libro::find($id);//busco el archivo
+
+        if($request->input('titulo')){
+            $datosLibro->titulo=$request->input('titulo');
+        }
+
+        $datosLibro->save();
+
+        return response()->json("Datos actualizados");
+
+    }
+
 
 
 }
