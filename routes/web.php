@@ -16,3 +16,12 @@
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
+
+
+
+
+
+$router->get('/ver/{tipo}','LibrosController@search');
+$router->get('/listado','LibrosController@index');
+$router->post('/crear','LibrosController@store');
+
