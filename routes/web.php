@@ -21,7 +21,9 @@ $router->get('/', function () use ($router) {
 
 
 
-$router->get('/ver/{tipo}','LibrosController@search');
+$router->get('/ver/tipo/{tipo}','LibrosController@search');
+$router->get('/ver/id/{id}','LibrosController@show');
+
 $router->get('/listado','LibrosController@index');
 $router->post('/crear','LibrosController@store');
 

@@ -41,6 +41,12 @@ class LibrosController extends Controller{
     
     }
 
+    public function show($id){
+        $datosLibro = new Libro;
+        $datosEncontrados = $datosLibro->find($id);
+        return response()->json($datosEncontrados);
+    }
+
 
 
 }
