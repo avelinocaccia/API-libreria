@@ -22,17 +22,20 @@ class LibrosController extends Controller{
         $datosLibros = new Libro;
 
         if($request->hasFile('imagen')){
-            $nombreArchivoOriginal=$request->file('imagen')->getClientOriginalName();
-            $nuevoNombre = Carbon::now()->timestamp."_".$nombreArchivoOriginal;
+            $nombreArchivoOriginal=$request->file('imagen')->getClientOriginalName(); //obtiene el nombre original del archivo qeu nos estan enviando
+            $nuevoNombre = Carbon::now()->timestamp."_".$nombreArchivoOriginal; // le asigno un nuevo nombre con un identificador unico qeu es el metodo now.
+            $carpetaDestino='./upload/'; //indico la carpeta de destino donde se va a subir el archivo
+            $request->file('imagen')->move($carpetaDestino, $nuevoNombre); //muevo el archivo a la carpeta de destino con el nuevo nombre
+           
+            //campo de la tabla = informacion recibida por postman
+            $datosLibros->imagen=ltrim($carpetaDestino,'.').$nuevoNombre;
+            $datosLibros->titulo=$request->titulo;
+            $datosLibros->tipo=$request->tipo;
+
+            $datosLibros->save(); // salva los datos enviados a la db
+
         }
 
-        $request->file('imagen');
-
-        //campo de la tabla = informacion recibida por postman
-        $datosLibros->titulo=$request->titulo;
-        $datosLibros->imagen=$request->imagen;
-        $datosLibros->tipo=$request->tipo;
-        $datosLibros->save(); // salva los datos enviados a la db
         return response()->json($nuevoNombre); //respondo con los datos enviados por el cliente
 
     
